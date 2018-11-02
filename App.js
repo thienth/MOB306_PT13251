@@ -5,64 +5,52 @@ import { StyleSheet,
         Image,
         TextInput,
         TouchableOpacity } from 'react-native';
+import Item from './components/ItemComponent';
 
 export default class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      content: 0,
+      listItem: [
+        {
+          itemId: 1,
+          itemName: 'Apple Iphone 6',
+          price: 3000
+        },
+        {
+          itemId: 2,
+          itemName: 'Samsung Galaxy s7',
+          price: 3500
+        },
+        {
+          itemId: 3,
+          itemName: 'Oppo F1s',
+          price: 1500
+        },
+        {
+          itemId: 4,
+          itemName: 'Bphone 3',
+          price: 2000
+        }
+      ]
+    };
+  }
+  componentDidMount() {
+    var count = 0;
+    var that = this;
+    setInterval(function(){
+      that.setState({content: count});
+      count++;
+    }, 1000);
+  }
   render() {
     return (
       <View style={styles.container}>
-        <Image
-          style={{width: 100, height: 100}} 
-          source={
-            {
-              uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/2000px-React-icon.svg.png'
-            }
-          }
-        />
-        <TextInput 
-          style={
-            {
-              width: '90%',
-              fontSize: 18,
-              height: 45,
-              borderRadius: 20,
-              paddingLeft: 10,
-              borderWidth: 1,
-              borderColor: '#ccc'
-            }
-          }
-          placeholder="Nhập tài khoản/Email"
-          value=""/>
-          <TextInput 
-          style={
-            {
-              marginTop: 10,
-              width: '90%',
-              fontSize: 18,
-              height: 45,
-              borderRadius: 20,
-              paddingLeft: 10,
-              borderWidth: 1,
-              borderColor: '#ccc'
-            }
-          }
-          secureTextEntry={true}
-          placeholder="Mật khẩu"
-          value=""/>
-          <TouchableOpacity
-             style={
-              {
-                borderRadius: 20,
-                marginTop: 10,
-                width: 300,
-                height: 45,
-                backgroundColor: '#DDDDDD',
-                alignItems: 'center',
-                justifyContent: 'center'
-              }
-             }
-             >
-             <Text> Login </Text>
-           </TouchableOpacity>
+        {this.state.listItem.map(
+          (item) => <Item itemInfo={item}/>
+        )}
+        
       </View>
     );
   }
