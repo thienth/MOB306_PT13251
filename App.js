@@ -48,7 +48,7 @@ export default class App extends React.Component {
     return (
       <View style={styles.container}>
         {this.state.listItem.map(
-          (item) => <Item itemInfo={item}/>
+          (item) => <Item key={item.itemId} itemInfo={item}/>
         )}
         
       </View>
