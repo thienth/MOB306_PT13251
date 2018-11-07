@@ -1,66 +1,19 @@
 import React from 'react';
-import { StyleSheet, 
-        Text, 
-        View,
-        Image,
-        TextInput,
-        TouchableOpacity } from 'react-native';
-import Item from './components/ItemComponent';
+import {createStackNavigator} from 'react-navigation';
+import HomeScreen from './screens/Home';
+import CategoryScreen from './screens/Categories';
+const RootStack = createStackNavigator({
+    Home: HomeScreen,
+    Category: CategoryScreen,
+  },
+  {
+    initialRouteName: 'Home',
+  }
+);
 
 export default class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      content: 0,
-      listItem: [
-        {
-          itemId: 1,
-          itemName: 'Apple Iphone 6',
-          price: 3000
-        },
-        {
-          itemId: 2,
-          itemName: 'Samsung Galaxy s7',
-          price: 3500
-        },
-        {
-          itemId: 3,
-          itemName: 'Oppo F1s',
-          price: 1500
-        },
-        {
-          itemId: 4,
-          itemName: 'Bphone 3',
-          price: 2000
-        }
-      ]
-    };
-  }
-  componentDidMount() {
-    var count = 0;
-    var that = this;
-    setInterval(function(){
-      that.setState({content: count});
-      count++;
-    }, 1000);
-  }
   render() {
-    return (
-      <View style={styles.container}>
-        {this.state.listItem.map(
-          (item) => <Item key={item.itemId} itemInfo={item}/>
-        )}
-        
-      </View>
-    );
+    return <RootStack />;
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  }
-});
