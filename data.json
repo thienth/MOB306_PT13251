@@ -1,0 +1,32 @@
+{
+	"categories": [
+		{
+			"id": 1,
+			"name": "Thể thao"
+		},
+		{
+			"id": 2,
+			"name": "Thế giới"
+		},
+		{
+			"id": 3,
+			"name": "Làm đẹp"
+		},
+		{
+			"id": 4,
+			"name": "Sức khoẻ"
+		},
+		{
+			"id": 5,
+			"name": "Văn hoá"
+		},
+		{
+			"id": 6,
+			"name": "Giáo dục"
+		},
+		{
+			"id": 7,
+			"name": "An ninh"
+		}
+	]
+}
