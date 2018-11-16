@@ -5,21 +5,12 @@ import {
       View,
       TouchableOpacity
     } from 'react-native';
-import firebase from 'firebase';
-
-const config = {
-    apiKey: "AIzaSyAabdUQr1CPiz5WsxdM3IwNwy_SJRbCHXA",
-    authDomain: "pt13251-b9727.firebaseapp.com",
-    databaseURL: "https://pt13251-b9727.firebaseio.com",
-    projectId: "pt13251-b9727",
-    storageBucket: "pt13251-b9727.appspot.com",
-    messagingSenderId: "168582052372"
-};
+import firebaseConf from '../lib/firebaseConfig';
 export default class HomeScreen extends React.Component{
   constructor(props) {
     super(props);
     this.getListCate = this.getListCate.bind(this);
-    firebase.initializeApp(config);
+    this.removeCategoryById = this.removeCategoryById.bind(this);
     this.state = {
       categories: []
     }
@@ -30,25 +21,54 @@ export default class HomeScreen extends React.Component{
 
   componentDidMount() {
     this.getListCate();
+    
   }
 
   getListCate(){
     var that = this;
-    firebase.database().ref('categories/').on('value', function (snapshot) {
-        that.setState({categories: snapshot.val()});
+    firebaseConf.database().ref('categories/').on('value', function (snapshot) {
+        let cates = [];
+        snapshot.forEach((child) => {
+
+          let item = {
+            key: child.key,
+            name: child.val().name
+          }
+          cates.push(item);
+        });
+
+        that.setState({categories: cates});
     });
+  }
+
+  removeCategoryById(cateId){
+    firebaseConf.database().ref('categories/' + cateId).remove();
   }
 
   render() {
     return (
       <View >
+        <TouchableOpacity onPress={() => this.props.navigation.navigate('AddCate')}>
+          <Text>Thêm danh mục</Text>
+        </TouchableOpacity>
         {this.state.categories.map( item => 
-          <View key={item.id}>
-            <Text>{item.id}</Text>
-            <Text>{item.name}</Text>
+          <View key={item.key}>
+            <Text>{item.name}</Text> 
+            <TouchableOpacity onPress={() => this.removeCategoryById(item.key)}>
+              <Text>Xoá</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => 
+              this.props.navigation.navigate('EditCate', {item})
+            }>
+              <Text>Cập nhật</Text>
+            </TouchableOpacity>
           </View>
         )}
       </View>
     );
   }
 }
+
+/*
+
+ */
