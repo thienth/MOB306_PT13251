@@ -3,7 +3,8 @@ import {
       StyleSheet, 
       Text, 
       View,
-      TouchableOpacity
+      TouchableOpacity,
+      ActivityIndicator
     } from 'react-native';
 import firebaseConf from '../lib/firebaseConfig';
 export default class HomeScreen extends React.Component{
@@ -46,26 +47,29 @@ export default class HomeScreen extends React.Component{
   }
 
   render() {
-    return (
-      <View >
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('AddCate')}>
-          <Text>Thêm danh mục</Text>
-        </TouchableOpacity>
-        {this.state.categories.map( item => 
-          <View key={item.key}>
-            <Text>{item.name}</Text> 
-            <TouchableOpacity onPress={() => this.removeCategoryById(item.key)}>
-              <Text>Xoá</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => 
-              this.props.navigation.navigate('EditCate', {item})
-            }>
-              <Text>Cập nhật</Text>
-            </TouchableOpacity>
-          </View>
-        )}
-      </View>
-    );
+    var indicatorView = <View>
+      <ActivityIndicator size="large" color="#0000ff" />
+    </View>;
+
+    var listCateView = <View>
+          <TouchableOpacity onPress={() => this.props.navigation.navigate('AddCate')}>
+                <Text>Thêm danh mục</Text>
+              </TouchableOpacity>
+              {this.state.categories.map( item => 
+                <View key={item.key}>
+                  <Text>{item.name}</Text> 
+                  <TouchableOpacity onPress={() => this.removeCategoryById(item.key)}>
+                    <Text>Xoá</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => 
+                    this.props.navigation.navigate('EditCate', {item})
+                  }>
+                    <Text>Cập nhật</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+    </View>;
+    return this.state.categories.length == 0 ? indicatorView : listCateView;
   }
 }
 
