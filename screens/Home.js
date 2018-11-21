@@ -4,16 +4,32 @@ import {
       Text, 
       View,
       TouchableOpacity,
-      ActivityIndicator
+      ActivityIndicator,
+      Dimensions
+
     } from 'react-native';
+
+import {TabView, TabBar, SceneMap} from 'react-native-tab-view';
 import firebaseConf from '../lib/firebaseConfig';
+
+const FirstRoute = () => (
+  <View style={[styles.scene, { backgroundColor: '#ff4081' }]} />
+);
+const SecondRoute = () => (
+  <View style={[styles.scene, { backgroundColor: '#673ab7' }]} />
+);
+
 export default class HomeScreen extends React.Component{
   constructor(props) {
     super(props);
-    this.getListCate = this.getListCate.bind(this);
-    this.removeCategoryById = this.removeCategoryById.bind(this);
+    // this.getListCate = this.getListCate.bind(this);
+    // this.removeCategoryById = this.removeCategoryById.bind(this);
     this.state = {
-      categories: []
+      index: 0,
+      routes: [
+        { key: 'first', title: 'First' },
+        { key: 'second', title: 'Second' },
+      ]
     }
   }
   static navigationOptions = {
@@ -21,58 +37,46 @@ export default class HomeScreen extends React.Component{
   };
 
   componentDidMount() {
-    this.getListCate();
+    // this.getListCate();
     
   }
 
-  getListCate(){
-    var that = this;
-    firebaseConf.database().ref('categories/').on('value', function (snapshot) {
-        let cates = [];
-        snapshot.forEach((child) => {
+  // getListCate(){
+  //   var that = this;
+  //   firebaseConf.database().ref('categories/').on('value', function (snapshot) {
+  //       let cates = [];
+  //       snapshot.forEach((child) => {
 
-          let item = {
-            key: child.key,
-            name: child.val().name
-          }
-          cates.push(item);
-        });
+  //         let item = {
+  //           key: child.key,
+  //           name: child.val().name
+  //         }
+  //         cates.push(item);
+  //       });
 
-        that.setState({categories: cates});
-    });
-  }
-
-  removeCategoryById(cateId){
-    firebaseConf.database().ref('categories/' + cateId).remove();
-  }
+  //       that.setState({categories: cates});
+  //   });
+  // }
 
   render() {
-    var indicatorView = <View>
-      <ActivityIndicator size="large" color="#0000ff" />
-    </View>;
+    // return this.state.categories.length == 0 ? indicatorView : listCateView;
+    return (
+      <TabView
+        navigationState={this.state}
+        renderScene={SceneMap({
+          first: FirstRoute,
+          second: SecondRoute,
+        })}
+        onIndexChange={index => this.setState({index})}
+        initialLayout={{ width: Dimensions.get('window').width }}
+      />
 
-    var listCateView = <View>
-          <TouchableOpacity onPress={() => this.props.navigation.navigate('AddCate')}>
-                <Text>Thêm danh mục</Text>
-              </TouchableOpacity>
-              {this.state.categories.map( item => 
-                <View key={item.key}>
-                  <Text>{item.name}</Text> 
-                  <TouchableOpacity onPress={() => this.removeCategoryById(item.key)}>
-                    <Text>Xoá</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={() => 
-                    this.props.navigation.navigate('EditCate', {item})
-                  }>
-                    <Text>Cập nhật</Text>
-                  </TouchableOpacity>
-                </View>
-              )}
-    </View>;
-    return this.state.categories.length == 0 ? indicatorView : listCateView;
+    );
+    
   }
 }
-
-/*
-
- */
+const styles = StyleSheet.create({
+  scene: {
+    flex: 1,
+  },
+});
