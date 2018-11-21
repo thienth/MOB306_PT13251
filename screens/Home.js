@@ -6,18 +6,14 @@ import {
       TouchableOpacity,
       ActivityIndicator,
       Dimensions
-
     } from 'react-native';
 
 import {TabView, TabBar, SceneMap} from 'react-native-tab-view';
 import firebaseConf from '../lib/firebaseConfig';
+import ListPost from '../components/ListPost';
+import ListCategory from '../components/ListCategory';
+import Contact from '../components/Contact';
 
-const FirstRoute = () => (
-  <View style={[styles.scene, { backgroundColor: '#ff4081' }]} />
-);
-const SecondRoute = () => (
-  <View style={[styles.scene, { backgroundColor: '#673ab7' }]} />
-);
 
 export default class HomeScreen extends React.Component{
   constructor(props) {
@@ -27,8 +23,9 @@ export default class HomeScreen extends React.Component{
     this.state = {
       index: 0,
       routes: [
-        { key: 'first', title: 'First' },
-        { key: 'second', title: 'Second' },
+        { key: 'first', title: 'Bài viết' },
+        { key: 'second', title: 'Danh mục' },
+        { key: 'third', title: 'Liên hệ' },
       ]
     }
   }
@@ -64,8 +61,9 @@ export default class HomeScreen extends React.Component{
       <TabView
         navigationState={this.state}
         renderScene={SceneMap({
-          first: FirstRoute,
-          second: SecondRoute,
+          first: ListPost,
+          second: ListCategory,
+          third: Contact,
         })}
         onIndexChange={index => this.setState({index})}
         initialLayout={{ width: Dimensions.get('window').width }}
